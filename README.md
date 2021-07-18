@@ -24,6 +24,15 @@ end</pre>
   #doStuff
 end</pre>
 
+### Arithmetic operators
+<pre>
++ = addition
+- = subtraction
+* = multiplication
+/ = division
+mod = modulo
+</pre>
+
 ### Debugging
 <pre>
 showme&#60;expression&#62;
