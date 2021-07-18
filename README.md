@@ -4,25 +4,25 @@ WeirdFlex is a small programming language based on jFlex.
 ## Syntax
 
 ### Variables
-identifier = value
+<pre><code>identifier = value</code></pre>
 
 ### Functions
-func foo<a, b>:
+<pre><code>func foo<a, b>:
   #doStuff
   return bar
-end
+end</code></pre>
 
 ### If
-if<x == b>:
+<pre><code>if<x == b>:
   #doStuff
 else
   #doStuff
-end
+end</code></pre>
 
 ###While
-aslong<x == y>:
+<pre><code>aslong<x == y>:
   #doStuff
-end
+end</code></pre>
 
 ## Installation
 for generating the necessary files simply run "mvn clean install"
