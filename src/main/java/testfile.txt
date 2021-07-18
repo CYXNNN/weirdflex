@@ -11,8 +11,11 @@ func getDongs<>:
 end
 
 func doStuff<>:
-  aslong<2 == 2>:
-    showme<dongs>
+
+  x = 1
+
+  aslong<x == 2>:
+    showme<false>
   end
 
   return dongs
@@ -30,6 +33,7 @@ showme<dungs == dongs>
 showme<dungs == dings>
 
 showme<getDongs<>>
+showme<doStuff<>>
 
 
 

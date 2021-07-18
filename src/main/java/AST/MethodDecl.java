@@ -32,7 +32,8 @@ public class MethodDecl extends Node implements Callable {
 
   @Override
   public Object call(FormalList params) {
-
+    vars.execute();
+    statements.execute();
     return returnExp.execute();
   }
 }
