@@ -31,4 +31,4 @@ showme&#60;expressio&#62;>
 
 
 ## Installation
-for generating the necessary files simply run "mvn clean install"
+For generating the necessary files simply run "mvn clean install"
