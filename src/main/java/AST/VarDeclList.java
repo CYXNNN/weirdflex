@@ -22,4 +22,10 @@ public class VarDeclList extends Node{
   public int size() {
     return list.size();
   }
+
+  public void execute() {
+    for (Object v : list) {
+      ((VarDeclaration) v).execute();
+    }
+  }
 }

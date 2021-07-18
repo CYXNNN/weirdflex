@@ -1,17 +1,35 @@
+# this is a test for the WeirdFlex language
+
+# var declaration
 dongs = 2
 dungs = 4
+dings = 4
 
+# function declaration
 func getDongs<>:
   return dongs
 end
 
-func sum<a, b>:
-  ok = 4
-  return a + b
+func doStuff<>:
+  aslong<2 == 2>:
+    showme<dongs>
+  end
+
+  return dongs
 end
 
-if<dongs==dungs>:
-  dungs = 5
-else
-  dungs = 7
-end
+# statements
+showme<dongs>
+showme<dungs>
+showme<dungs + dongs>
+showme<dungs - dongs>
+showme<dungs * dongs>
+showme<dungs / dongs>
+showme<dungs mod dongs>
+showme<dungs == dongs>
+showme<dungs == dings>
+
+showme<getDongs<>>
+
+
+

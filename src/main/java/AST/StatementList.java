@@ -21,4 +21,10 @@ public class StatementList extends Node {
   public int size() {
     return list.size();
   }
+
+  public void execute() {
+    for (Object s : list) {
+      ((Statement) s).execute();
+    }
+  }
 }

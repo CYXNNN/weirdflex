@@ -26,8 +26,8 @@ non terminal FormalList FormalParameterList;
 non terminal FormalList FormalParameterListAndParens;
 non terminal ExpList ExpressionList;
 
-precedence nonassoc BECOMES, EQ;
-precedence left MINUS, PLUS, TIMES, DIV, MOD;
+precedence nonassoc BECOMES;
+precedence left MINUS, PLUS, TIMES, DIV, MOD, EQ;
 
 Program ::= VarDeclarationList:l MethodDeclList:m StatementList:s
             {: RESULT = new Program(l, m, s, mleft); :};

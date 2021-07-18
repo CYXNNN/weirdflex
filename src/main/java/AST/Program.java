@@ -14,6 +14,9 @@ public class Program extends Node{
   }
 
   public void execute() {
+    vars.execute();
+    functions.execute();
+    statements.execute();
   }
 
   public void accept(Visitor v) {

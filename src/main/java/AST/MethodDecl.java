@@ -26,15 +26,13 @@ public class MethodDecl extends Node implements Callable {
     v.visit(this);
   }
 
-  public Object execute() {
-    return null;
+  public void execute() {
+    store.putFunc(identifier.toString(), this);
   }
 
   @Override
   public Object call(FormalList params) {
 
     return returnExp.execute();
-
-
   }
 }
