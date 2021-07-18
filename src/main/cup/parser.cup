@@ -1,0 +1,110 @@
+import java_cup.runtime.*;
+import AST.*;
+import expressions.*;
+import statements.*;
+
+terminal FUNC, END, IF, ELSE, WHILE, RETURN, PRINT;
+terminal TRUE, FALSE;
+terminal PLUS, MINUS, TIMES, DIV, MOD, BECOMES, EQ, COMMA;
+terminal LT, RT, COLON;
+
+terminal String IDENTIFIER;
+terminal String STRING_LITERAL;
+terminal Integer INTEGER_LITERAL;
+
+non terminal Program Program;
+non terminal StatementList StatementList;
+non terminal MethodDecl MethodDecl;
+non terminal MethodDeclList MethodDeclList;
+non terminal Statement Statement;
+non terminal Exp Expression;
+non terminal Identifier Identifier;
+non terminal VarDeclaration VarDeclaration;
+non terminal VarDeclList VarDeclarationList;
+non terminal Formal FormalParameter;
+non terminal FormalList FormalParameterList;
+non terminal FormalList FormalParameterListAndParens;
+non terminal ExpList ExpressionList;
+
+precedence nonassoc BECOMES, EQ;
+precedence left MINUS, PLUS, TIMES, DIV, MOD;
+
+Program ::= VarDeclarationList:l MethodDeclList:m StatementList:s
+            {: RESULT = new Program(l, m, s, mleft); :};
+
+StatementList ::= Statement:s StatementList:l
+            {: RESULT = l; l.addElement(s); :}
+        |
+            {: RESULT = new StatementList(0); :};
+
+MethodDeclList ::=
+            {: RESULT = new MethodDeclList(0); :}
+        | MethodDecl:m MethodDeclList:l
+            {: RESULT = l; l.addElement(m); :};
+
+MethodDecl ::= FUNC Identifier:i FormalParameterListAndParens:params COLON VarDeclarationList:vars StatementList:stmts RETURN Expression:rv END
+            {: RESULT = new MethodDecl(i, params, vars, stmts, rv, ileft); :};
+
+Statement   ::= IF:ifKeyword LT Expression:expr RT COLON Statement:thenStmt ELSE Statement:elseStmt END
+                {: RESULT = new If(expr, thenStmt, elseStmt, ifKeywordleft); :}
+            | PRINT:p LT Expression:e RT
+                {: RESULT = new Print(e, pleft); :}
+            | WHILE:w LT Expression:cond RT COLON Statement:s END
+                    {: RESULT = new While(cond, s, wleft); :}
+            ;
+
+Identifier  ::= IDENTIFIER:id
+                {: RESULT = new Identifier(id, idleft); :}
+            ;
+
+Expression    ::= IDENTIFIER:name
+            {: RESULT = new IdentifierExp(name, nameleft); :}
+        | Expression:arg1 EQ Expression:arg2
+            {: RESULT = new Eq(arg1, arg2, arg1left); :}
+        | Expression:arg1 PLUS Expression:arg2
+            {: RESULT = new Plus(arg1, arg2, arg1left); :}
+        | Expression:arg1 MINUS Expression:arg2
+            {: RESULT = new Minus(arg1, arg2, arg1left); :}
+        | Expression:arg1 TIMES Expression:arg2
+            {: RESULT = new Times(arg1, arg2, arg1left); :}
+        | Expression:arg1 DIV Expression:arg2
+            {: RESULT = new Divide(arg1, arg2, arg1left); :}
+        | Expression:arg1 MOD Expression:arg2
+            {: RESULT = new Modulo(arg1, arg2, arg1left); :}
+        | TRUE:t
+            {: RESULT = new True(tleft); :}
+        | FALSE:f
+            {: RESULT = new False(fleft); :}
+        | INTEGER_LITERAL:i
+            {: RESULT = new IntegerLiteral(i.intValue(), ileft); :}
+        | Identifier:id FormalParameterListAndParens:l
+            {: RESULT = new Call(id, l, idleft); :}
+        ;
+
+VarDeclaration ::= Identifier:id BECOMES Expression:expr
+                    {: RESULT = new VarDeclaration(id, expr, idleft); :}
+                  ;
+
+VarDeclarationList ::=
+                        {: RESULT = new VarDeclList(0); :}
+                    | VarDeclarationList:l VarDeclaration:e
+                        {: RESULT = l; l.addElement(e); :}
+                    ;
+
+FormalParameterListAndParens ::= LT:l RT
+                                  {: RESULT = new FormalList(lleft); :}
+                              | LT FormalParameterList:params RT
+                                  {: RESULT = params; :}
+                              ;
+
+FormalParameterList ::= Identifier:i COMMA FormalParameterList:l
+                          {: RESULT = l; l.addElement(i); :}
+                      | Identifier:i
+                          {: RESULT = new FormalList(ileft); RESULT.addElement(i); :}
+                      ;
+
+ExpressionList ::= Expression:e
+                    {: RESULT = new ExpList(eleft); RESULT.addElement(e); :}
+                | Expression:e COMMA ExpressionList:l
+                    {: RESULT = l; RESULT.addElement(e); :}
+                ;

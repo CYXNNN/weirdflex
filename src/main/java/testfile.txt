@@ -1,0 +1,17 @@
+dongs = 2
+dungs = 4
+
+func getDongs<>:
+  return dongs
+end
+
+func sum<a, b>:
+  ok = 4
+  return a + b
+end
+
+if<dongs==dungs>:
+  dungs = 5
+else
+  dungs = 7
+end

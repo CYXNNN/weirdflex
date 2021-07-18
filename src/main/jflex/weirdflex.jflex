@@ -1,80 +1,73 @@
-//import java_cup.runtime.*;
-import java.io.*;
-import java_cup.runtime.*;
-
+import java_cup.runtime.Symbol;
 
 %%
-%class WeirdFlex
-%unicode
-%standalone
-%line
-%column
-
+%class WeirdScanner
+%cup
+%implements sym
 
 %{
-    private void printToken(String type) {
-      System.out.print(type + " ");
-    }
+  private Symbol sym(int sym) {
+    return new Symbol(sym);
+  }
 
-  private void printToken(String type, Object value) {
-    System.out.print(type + "(" + value.toString() + ") ");
-  }
-  private Symbol symbol(int type) {
-    System.out.println("(" + type + ")");
-    return new Symbol(type, yyline, yycolumn);
-  }
-  private Symbol symbol(int type, Object value) {
-    System.out.println("(" + type + ", " + value + ")");
-    return new Symbol(type, yyline, yycolumn, value);
+  private Symbol sym(int sym, Object val) {
+    return new Symbol(sym, val);
   }
 %}
 
-// lexical declarations
+/* Helper definitions */
 text = \"[0-9a-zA-Z]+\"
-space = [\ \t]
+digit = [0-9]
 linebreak = \n|\r|\r\n
-integer = [1-9][0-9]*
-comment = ["#":jletter:]
-
-identifier = [:jletter:]*
-func_key = "func"
-stmnt_close_key = "end"
-while_key = "aslong"
-for_key = "each"
-in_key = "of"
-if_key = "if"
-else_key = "else"
-
+white = {linebreak}|[ \t]
+identifier = [:jletter:]+
+comment =  "#"[^\n]*
 %%
 
-<YYINITIAL> {
+{comment} { /* ignore */ }
 
-  "true" {printToken("CONSTANT", yytext());}
-  "false" {printToken("CONSTANT", yytext());}
-  "<" {printToken("PARAM_S", yytext());}
-  ">" {printToken("PARAM_E", yytext());}
-  "(" {printToken("P_R");}
-  ")" {printToken("P_L");}
-  {text} {printToken("STRING", yytext());}
-  {integer} {printToken("INTEGER", yytext());}
-  {func_key} {printToken("FUNC_DECLARE_START");}
-  {stmnt_close_key} {printToken("END");}
-  {for_key} {printToken("FOR");}
-  {in_key} {printToken("IN");}
-  {if_key} {printToken("IF");}
-  {else_key} {printToken("ELSE");}
-  {while_key} {printToken("WHILE");}
-  "+" | "-" | "*" | "/" | "^" | "mod" | "=" | "==" {printToken("OPERATOR", yytext());}
-  {identifier} {printToken("IDENTIFIER", yytext());}
+/* reserved words */
+/* (put here so that reserved words take precedence over identifiers) */
 
-  // IGNORE
-  {linebreak} {System.out.println("");}
-  {space} | {comment} {}
+/* types */
+"true" { return sym(TRUE); }
+"false" { return sym(FALSE); }
 
-}
+/* control flow */
+"func" { return sym(FUNC); }
+"end" { return sym(END); }
+"if" { return sym(IF); }
+"else" { return sym(ELSE); }
+"aslong" { return sym(WHILE); }
+"return" { return sym(RETURN); }
+"showme" { return sym(PRINT); }
 
+
+/* literals */
+{digit}+ { return sym(INTEGER_LITERAL, new Integer(yytext())); }
+{text} { return sym(STRING_LITERAL, new String(yytext())); }
+
+/* operators */
+"+" { return sym(PLUS); }
+"-" { return sym(MINUS); }
+"*" { return sym(TIMES); }
+"/" { return sym(DIV); }
+"mod" { return sym(MOD); }
+"," { return sym(COMMA); }
+"=" { return sym(BECOMES); }
+"==" { return sym(EQ); }
+
+/* delimiters */
+"<" { return sym(LT); }
+">" { return sym(RT); }
+":" { return sym(COLON); }
+
+/* identifiers */
+{identifier} { return sym(IDENTIFIER, yytext()); }
+
+
+/* whitespace */
+{white}+ { /* ignore */ }
 
 // fallback for invalid syntax
-[^] {
-    System.out.println("SYNTAX ERROR: " + yytext());
-}
+[^] { throw new Error("Unrecognized input: " + yytext()); }
