@@ -18,6 +18,12 @@ func doStuff<>:
     showme<false>
   end
 
+  if<x == 1>:
+    showme<true>
+  else
+    showme<false>
+  end
+
   return dongs
 end
 
