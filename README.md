@@ -26,7 +26,7 @@ end</pre>
 
 ### Debugging
 <pre>
-showme&#60;expressio&#62;>
+showme&#60;expression&#62;
 </pre>
 
 
