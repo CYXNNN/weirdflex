@@ -7,26 +7,26 @@ WeirdFlex is a small programming language based on jFlex integrated with Maven
 <pre>identifier = value</pre>
 
 ### Functions
-<pre>func foo<a, b>:
+<pre>func foo&#60;a, b&#62;:
   #doStuff
   return bar
 end</pre>
 
 ### If
-<pre>if\<expression\>:
+<pre>if&#60;expression&#62;:
   #doStuff
 else
   #doStuff
 end</pre>
 
 ### While
-<pre>aslong\<expression\>:
+<pre>aslong&#60;expression&#62;:
   #doStuff
 end</pre>
 
 ### Debugging
 <pre>
-showme\<expression\>
+showme&#60;expressio&#62;>
 </pre>
 
 
