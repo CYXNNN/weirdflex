@@ -68,7 +68,7 @@ showme&#60;expression&#62;
 </pre>
 logs an expression to the console
 
-### Semantic Errors
+## Semantic Errors
 <pre>
 DEFAULT
 PARAM -> number of parameters missmatch
