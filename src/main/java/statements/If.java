@@ -20,7 +20,9 @@ public class If extends Statement {
     if ((Boolean) e.execute() == true) {
       s1.execute();
     } else {
-      s2.execute();
+      if (s2 != null) {
+        s2.execute();
+      }
     }
   }
 

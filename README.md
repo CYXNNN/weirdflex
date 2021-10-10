@@ -4,7 +4,7 @@ WeirdFlex is a small programming language based on jFlex integrated with Maven
 ## Syntax
 
 ### Variables
-<pre>identifier = value</pre>
+<pre> var identifier = value</pre>
 
 ### Functions
 <pre>func foo&#60;a, b&#62;:
@@ -16,6 +16,12 @@ end</pre>
 <pre>if&#60;expression&#62;:
   #doStuff
 else
+  #doStuff
+end</pre>
+
+or
+
+<pre>if&#60;expression&#62;:
   #doStuff
 end</pre>
 

@@ -29,7 +29,7 @@ public class Call extends Exp {
 
     // check if method is declared
     if (func == null) {
-      throw new WeirdException(Error.UNKNOWN_METHOD, line(), name);
+      throw new WeirdException(Error.UNKNOWN_METHOD, name);
     }
 
     return func.call(params);

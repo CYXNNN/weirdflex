@@ -3,9 +3,9 @@ import AST.*;
 import expressions.*;
 import statements.*;
 
-terminal FUNC, END, IF, ELSE, WHILE, RETURN, PRINT;
+terminal FUNC, END, IF, ELSE, WHILE, RETURN, PRINT, VARIABLE;
 terminal TRUE, FALSE;
-terminal PLUS, MINUS, TIMES, DIV, MOD, BECOMES, EQ, COMMA;
+terminal PLUS, MINUS, TIMES, DIV, MOD, BECOMES, EQ, NEQ, LESST, GT, COMMA;
 terminal LT, RT, COLON;
 
 terminal String IDENTIFIER;
@@ -27,7 +27,7 @@ non terminal FormalList FormalParameterListAndParens;
 non terminal ExpList ExpressionList;
 
 precedence nonassoc BECOMES;
-precedence left MINUS, PLUS, TIMES, DIV, MOD, EQ;
+precedence left MINUS, PLUS, TIMES, DIV, MOD, EQ, NEQ, LESST, GT;
 
 Program ::= VarDeclarationList:l MethodDeclList:m StatementList:s
             {: RESULT = new Program(l, m, s, mleft); :};
@@ -43,14 +43,20 @@ MethodDeclList ::=
             {: RESULT = l; l.addElement(m); :};
 
 MethodDecl ::= FUNC Identifier:i FormalParameterListAndParens:params COLON VarDeclarationList:vars StatementList:stmts RETURN Expression:rv END
-            {: RESULT = new MethodDecl(i, params, vars, stmts, rv, ileft); :};
+                  {: RESULT = new MethodDecl(i, params, vars, stmts, rv, ileft); :}
+            | FUNC Identifier:i FormalParameterListAndParens:params COLON VarDeclarationList:vars StatementList:stmts END
+                  {: RESULT = new MethodDecl(i, params, vars, stmts, null, ileft); :};
 
 Statement   ::= IF:ifKeyword LT Expression:expr RT COLON Statement:thenStmt ELSE Statement:elseStmt END
                 {: RESULT = new If(expr, thenStmt, elseStmt, ifKeywordleft); :}
+            | IF:ifKeyword LT Expression:expr RT COLON Statement:thenStmt END
+                {: RESULT = new If(expr, thenStmt, null, ifKeywordleft); :}
             | PRINT:p LT Expression:e RT
                 {: RESULT = new Print(e, pleft); :}
-            | WHILE:w LT Expression:cond RT COLON Statement:s END
-                    {: RESULT = new While(cond, s, wleft); :}
+            | WHILE:w LT Expression:cond RT COLON StatementList:stmts  END
+                 {: RESULT = new While(cond, stmts, wleft); :}
+            | IDENTIFIER:name BECOMES Expression:e
+                 {: RESULT = new VarAssignment(name, e, nameleft); :}
             ;
 
 Identifier  ::= IDENTIFIER:id
@@ -61,6 +67,12 @@ Expression    ::= IDENTIFIER:name
             {: RESULT = new IdentifierExp(name, nameleft); :}
         | Expression:arg1 EQ Expression:arg2
             {: RESULT = new Eq(arg1, arg2, arg1left); :}
+        | Expression:arg1 NEQ Expression:arg2
+            {: RESULT = new NotEq(arg1, arg2, arg1left); :}
+        | Expression:arg1 LESST Expression:arg2
+            {: RESULT = new LessThan(arg1, arg2, arg1left); :}
+        | Expression:arg1 GT Expression:arg2
+            {: RESULT = new GreaterThan(arg1, arg2, arg1left); :}
         | Expression:arg1 PLUS Expression:arg2
             {: RESULT = new Plus(arg1, arg2, arg1left); :}
         | Expression:arg1 MINUS Expression:arg2
@@ -77,12 +89,17 @@ Expression    ::= IDENTIFIER:name
             {: RESULT = new False(fleft); :}
         | INTEGER_LITERAL:i
             {: RESULT = new IntegerLiteral(i.intValue(), ileft); :}
+        | STRING_LITERAL:i
+            {: RESULT = new StringLiteral(i, ileft); :}
         | Identifier:id FormalParameterListAndParens:l
             {: RESULT = new Call(id, l, idleft); :}
         ;
 
-VarDeclaration ::= Identifier:id BECOMES Expression:expr
+VarDeclaration ::= VARIABLE Identifier:id BECOMES Expression:expr
                     {: RESULT = new VarDeclaration(id, expr, idleft); :}
+                    |
+                    VARIABLE Identifier:id
+                    {: RESULT = new VarDeclaration(id, null, idleft); :}
                   ;
 
 VarDeclarationList ::=

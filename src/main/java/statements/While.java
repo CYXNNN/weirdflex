@@ -2,21 +2,24 @@ package statements;
 
 import AST.Exp;
 import AST.Statement;
+import AST.StatementList;
 import AST.Visitor;
 
 public class While extends Statement {
   private Exp e;
-  private Statement s;
+  public StatementList statements;
 
-  public While(Exp ae, Statement as, int ln) {
+  public While(Exp exp,StatementList statements, int ln) {
     super(ln);
-    e=ae; s=as;
+    this.e = exp;
+    this.statements = statements;
   }
 
   @Override
   public void execute() {
+
     while((Boolean) e.execute()) {
-      s.execute();
+      statements.execute();
     }
   }
 

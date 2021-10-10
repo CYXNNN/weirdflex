@@ -2,6 +2,8 @@ package expressions;
 
 import AST.Exp;
 import AST.Visitor;
+import util.SemanticCheck;
+import util.Variable;
 
 public class Eq extends Exp {
   public Exp left;
@@ -15,10 +17,15 @@ public class Eq extends Exp {
 
   @Override
   public Object execute() {
-    var a = (Integer) left.execute();
-    var b = (Integer) right.execute();
+    var a = left.execute();
+    var b = right.execute();
 
-    return  a == b;
+    if (a instanceof Variable)
+      a = ((Variable) a).value;
+    if (b instanceof Variable)
+      b = ((Variable) b).value;
+
+    return  a.equals(b);
   }
 
   @Override

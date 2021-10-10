@@ -7,6 +7,7 @@ import AST.Visitor;
 import exception.Error;
 import exception.WeirdException;
 import util.ScopeStore;
+import util.Variable;
 
 public class VarDeclaration extends Statement {
 
@@ -25,10 +26,12 @@ public class VarDeclaration extends Statement {
     var name = i.toString();
 
     if (store.getVar(name) != null) {
-      throw new WeirdException(Error.VAR_DECL_EXISTS, line(), name);
+      throw new WeirdException(Error.VAR_DECL_EXISTS, name);
     }
 
-    store.putVar(i.toString(), e.execute());
+    var value = e == null ? null : e.execute();
+
+    store.putVar(name, new Variable().build(name, "global", value));
   }
 
   @Override

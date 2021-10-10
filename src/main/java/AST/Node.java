@@ -7,8 +7,4 @@ abstract public class Node {
     this.line = line;
   }
 
-  public String line() {
-    return String.valueOf(line);
-  }
-
 }

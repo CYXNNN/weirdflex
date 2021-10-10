@@ -1,11 +1,18 @@
 import java_cup.runtime.Symbol;
 
 %%
+%public
+%final
 %class WeirdScanner
+%unicode
 %cup
 %implements sym
+%line
+%column
 
 %{
+  StringBuffer string = new StringBuffer();
+
   private Symbol sym(int sym) {
     return new Symbol(sym);
   }
@@ -15,6 +22,7 @@ import java_cup.runtime.Symbol;
   }
 %}
 
+
 /* Helper definitions */
 text = \"[0-9a-zA-Z]+\"
 digit = [0-9]
@@ -22,18 +30,17 @@ linebreak = \n|\r|\r\n
 white = {linebreak}|[ \t]
 identifier = [:jletter:]+
 comment =  "#"[^\n]*
+%state STRING
 %%
 
 {comment} { /* ignore */ }
-
-/* reserved words */
-/* (put here so that reserved words take precedence over identifiers) */
 
 /* types */
 "true" { return sym(TRUE); }
 "false" { return sym(FALSE); }
 
 /* control flow */
+"var" {return sym(VARIABLE); }
 "func" { return sym(FUNC); }
 "end" { return sym(END); }
 "if" { return sym(IF); }
@@ -45,7 +52,21 @@ comment =  "#"[^\n]*
 
 /* literals */
 {digit}+ { return sym(INTEGER_LITERAL, new Integer(yytext())); }
-{text} { return sym(STRING_LITERAL, new String(yytext())); }
+
+<YYINITIAL> {
+  \'                             { yybegin(STRING); string.setLength(0); }
+}
+<STRING> {
+  \'                             { yybegin(YYINITIAL);
+                                   return sym(STRING_LITERAL, string.toString()); }
+  [^\n\r\"\\]+                   { string.append( yytext() ); }
+  \\t                            { string.append('\t'); }
+  \\n                            { string.append('\n'); }
+
+  \\r                            { string.append('\r'); }
+  \\\'                           { string.append('\"'); }
+  \\                             { string.append('\\'); }
+}
 
 /* operators */
 "+" { return sym(PLUS); }
@@ -56,6 +77,9 @@ comment =  "#"[^\n]*
 "," { return sym(COMMA); }
 "=" { return sym(BECOMES); }
 "==" { return sym(EQ); }
+"!=" { return sym(NEQ); }
+"less" { return sym(LT); }
+"greater" { return sym(GT); }
 
 /* delimiters */
 "<" { return sym(LT); }

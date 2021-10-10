@@ -2,6 +2,7 @@ package expressions;
 
 import AST.Exp;
 import AST.Visitor;
+import util.SemanticCheck;
 
 public class Minus extends Exp {
   private Exp left;
@@ -15,8 +16,13 @@ public class Minus extends Exp {
 
   @Override
   public Object execute() {
-    var a = (Integer) left.execute();
-    var b = (Integer) right.execute();
+    var a = getNumericValue(left.execute());
+    var b = getNumericValue(right.execute());
+
+    SemanticCheck.checkTypeOperatable(a);
+    SemanticCheck.checkTypeOperatable(b);
+    SemanticCheck.checkNullValue(a, left);
+    SemanticCheck.checkNullValue(b, right);
 
     return  a - b;
   }

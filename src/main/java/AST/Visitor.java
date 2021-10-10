@@ -4,13 +4,18 @@ import expressions.Call;
 import expressions.Divide;
 import expressions.Eq;
 import expressions.False;
+import expressions.GreaterThan;
 import expressions.IdentifierExp;
 import expressions.IntegerLiteral;
+import expressions.LessThan;
 import expressions.Minus;
 import expressions.Modulo;
+import expressions.NotEq;
 import expressions.Plus;
+import expressions.StringLiteral;
 import expressions.Times;
 import expressions.True;
+import statements.VarAssignment;
 import statements.If;
 import statements.Print;
 import statements.VarDeclaration;
@@ -25,6 +30,7 @@ public interface Visitor {
   void visit(VarDeclaration n);
 
   // expressions
+  void visit(VarAssignment n);
   void visit(Call n);
   void visit(Eq eq);
   void visit(Plus n);
@@ -42,4 +48,8 @@ public interface Visitor {
   void visit(Print n);
   void visit(While n);
 
+	void visit(StringLiteral stringLiteral);
+  void visit(NotEq notEq);
+	void visit(GreaterThan greaterThan);
+  void visit(LessThan lessThan);
 }

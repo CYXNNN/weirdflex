@@ -4,6 +4,7 @@ import exception.Error;
 import exception.WeirdException;
 import util.Callable;
 import util.ScopeStore;
+import util.Variable;
 
 public class MethodDecl extends Node implements Callable {
   public Identifier identifier;
@@ -37,13 +38,22 @@ public class MethodDecl extends Node implements Callable {
 
     // check if method is declared
     if (store.getFunc(this.identifier.toString()) == null) {
-      throw new WeirdException(Error.UNKNOWN_METHOD, line(), this.identifier.toString());
+      throw new WeirdException(Error.UNKNOWN_METHOD, this.identifier.toString());
+    }
+
+    store.ctx = identifier.toString();
+
+    for(int i = 0; i < this.params.size(); i++) {
+      var current = this.params.elementAt(i);
+      store.putVar(current.toString(),
+        new Variable().build(current.toString(),
+          identifier.toString(),
+          store.getVar(params.elementAt(i).toString()).value));
     }
 
     // check if supplied params equals to defined
     if (params.size() != this.params.size()) {
       throw new WeirdException(Error.PARAM,
-              line(),
               this.identifier.toString(),
               String.valueOf(this.params.size()),
               String.valueOf(params.size()));
@@ -51,6 +61,13 @@ public class MethodDecl extends Node implements Callable {
 
     vars.execute();
     statements.execute();
-    return returnExp.execute();
+
+    store.ctx = "global";
+
+    if (returnExp != null) {
+      return returnExp.execute();
+    }
+
+    return null;
   }
 }
