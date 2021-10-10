@@ -5,12 +5,23 @@ WeirdFlex is a small programming language based on jFlex integrated with Maven
 
 ### Variables
 <pre> var identifier = value</pre>
+<pre> var identifier</pre>
+
+If no value expression is specified the value will be null.
 
 ### Functions
 <pre>func foo&#60;a, b&#62;:
   #doStuff
   return bar
 end</pre>
+
+or
+
+<pre>func foo&#60;a, b&#62;:
+  #doStuff
+end</pre>
+
+A function may not implement a return statement
 
 ### If
 <pre>if&#60;expression&#62;:
@@ -25,6 +36,18 @@ or
   #doStuff
 end</pre>
 
+### Comparison
+<pre>Expression == Expression</pre>
+Evaluates to true if the values of two expressions evaluated to the same
+
+<pre>Expression != Expression</pre>
+Evaluates to true if the two expressions evaluated to different values
+
+<pre>Expression less Expression</pre>
+Evaluates to true if the numeric expression on the left is less than the numerical value on the right
+
+<pre>Expression greater Expression</pre>
+Evaluates to true if the numeric expression on the left is greater than the numerical value on the right
 ### While
 <pre>aslong&#60;expression&#62;:
   #doStuff
@@ -47,3 +70,4 @@ showme&#60;expression&#62;
 
 ## Installation
 For generating the necessary files simply run "mvn clean install"
+And btw. the target directory was commited on purpose.
