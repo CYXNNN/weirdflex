@@ -5,6 +5,8 @@ import AST.FormalList;
 import AST.Identifier;
 import AST.Statement;
 import AST.Visitor;
+import exception.Error;
+import exception.WeirdException;
 import util.ScopeStore;
 
 public class Call extends Exp {
@@ -24,6 +26,11 @@ public class Call extends Exp {
 
     var name = identifier.toString();
     var func = store.getFunc(name);
+
+    // check if method is declared
+    if (func == null) {
+      throw new WeirdException(Error.UNKNOWN_METHOD, line(), name);
+    }
 
     return func.call(params);
   }

@@ -6,4 +6,9 @@ abstract public class Node {
   public Node(int line) {
     this.line = line;
   }
+
+  public String line() {
+    return String.valueOf(line);
+  }
+
 }

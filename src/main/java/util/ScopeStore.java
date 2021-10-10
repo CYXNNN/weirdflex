@@ -17,7 +17,7 @@ public class ScopeStore {
   }
 
   public Map<String, MethodDecl> functions = new HashMap<>();
-  public Map<String, Object> variables = new HashMap<>();;
+  public Map<String, Object> variables = new HashMap<>();
   public Map<String, Map<String, Object>> functionVariables;
 
   public void putVar(String key, Object value) {

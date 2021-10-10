@@ -4,6 +4,8 @@ import AST.Exp;
 import AST.Identifier;
 import AST.Statement;
 import AST.Visitor;
+import exception.Error;
+import exception.WeirdException;
 import util.ScopeStore;
 
 public class VarDeclaration extends Statement {
@@ -20,6 +22,12 @@ public class VarDeclaration extends Statement {
 
   @Override
   public void execute() {
+    var name = i.toString();
+
+    if (store.getVar(name) != null) {
+      throw new WeirdException(Error.VAR_DECL_EXISTS, line(), name);
+    }
+
     store.putVar(i.toString(), e.execute());
   }
 

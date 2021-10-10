@@ -1,9 +1,10 @@
 # this is a test for the WeirdFlex language
 
 # var declaration
-dongs = 2
+dongs = 25
 dungs = 4
 dings = 4
+zero = 0
 
 # function declaration
 func getDongs<>:
@@ -33,7 +34,7 @@ showme<dungs>
 showme<dungs + dongs>
 showme<dungs - dongs>
 showme<dungs * dongs>
-showme<dungs / dongs>
+showme<dungs / zero>
 showme<dungs mod dongs>
 showme<dungs == dongs>
 showme<dungs == dings>

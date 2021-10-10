@@ -1,5 +1,7 @@
 package AST;
 
+import exception.Error;
+import exception.WeirdException;
 import util.Callable;
 import util.ScopeStore;
 
@@ -32,6 +34,21 @@ public class MethodDecl extends Node implements Callable {
 
   @Override
   public Object call(FormalList params) {
+
+    // check if method is declared
+    if (store.getFunc(this.identifier.toString()) == null) {
+      throw new WeirdException(Error.UNKNOWN_METHOD, line(), this.identifier.toString());
+    }
+
+    // check if supplied params equals to defined
+    if (params.size() != this.params.size()) {
+      throw new WeirdException(Error.PARAM,
+              line(),
+              this.identifier.toString(),
+              String.valueOf(this.params.size()),
+              String.valueOf(params.size()));
+    }
+
     vars.execute();
     statements.execute();
     return returnExp.execute();

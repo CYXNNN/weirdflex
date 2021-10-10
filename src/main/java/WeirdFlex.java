@@ -3,12 +3,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class WeirdFlex {
-  public static void main(String[] args) throws FileNotFoundException {
-    Reader reader = null;
+  public static void main(String[] args) throws URISyntaxException, FileNotFoundException {
+    Reader reader;
+    File input;
 
-    File input = new File("testfile.txt");
+
+    if (args.length > 0) {
+      input = getFile(args[0]);
+    } else {
+      input = getFile("testfile.wfx");
+    }
+
     if (!input.canRead()) {
       System.err.println("Error: could not read [" + input + "]");
     }
@@ -26,5 +35,14 @@ public class WeirdFlex {
 
     program.execute();
 
+  }
+
+  private static File getFile(String name) throws URISyntaxException {
+    URL resource = WeirdFlex.class.getClassLoader().getResource(name);
+    if (resource == null) {
+      throw new IllegalArgumentException("file not found!");
+    } else {
+      return new File(resource.toURI());
+    }
   }
 }
