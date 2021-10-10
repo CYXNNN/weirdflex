@@ -6,7 +6,7 @@ var whileEnd = 10
 var five = 5
 var ten = 10
 var six = 6
-var dongs
+var dongs = false
 var doStuffReturnValue
 
 # function declaration

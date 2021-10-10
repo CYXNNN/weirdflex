@@ -66,8 +66,22 @@ mod = modulo
 <pre>
 showme&#60;expression&#62;
 </pre>
+logs an expression to the console
 
+### Semantic Errors
+<pre>
+DEFAULT
+PARAM -> number of parameters missmatch
+UNKNOWN_METHOD -> a non defined method is called
+DIVISON_BY_ZERO -> division by zero
+VAR_DECL_EXISTS -> variable declared more than once
+VAR_DECL_NOT_EXISTS -> accessed a variable which is not defined
+NULL -> something is null which should not be
+NOT_NUMERICAL -> mathematical operation on non numeric values
+OUT_OF_SCOPE -> accessed a variable which is not declared for the current scope
+RESERVED_WORD -> a reserved word was used as identifier
+</pre>
 
 ## Installation
-For generating the necessary files simply run "mvn clean install"
+For generating the necessary files simply run "mvn clean install".
 And btw. the target directory was commited on purpose.
